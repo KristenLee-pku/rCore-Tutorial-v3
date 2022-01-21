@@ -12,6 +12,7 @@ mod syscall;
 mod trap;
 mod batch;
 mod sync;
+mod oslog;
 
 global_asm!(include_str!("entry.asm"));
 global_asm!(include_str!("link_app.S"));
@@ -32,6 +33,8 @@ fn clear_bss() {
 #[no_mangle]
 pub fn rust_main() -> ! {
     clear_bss();
+    oslog::init();
+    
     println!("[kernel] Hello, world!");
     trap::init();
     batch::init();
