@@ -8,6 +8,9 @@
 mod console;
 mod lang_items;
 mod sbi;
+mod oslog;
+
+use log::{*};
 
 global_asm!(include_str!("entry.asm"));
 
@@ -34,11 +37,13 @@ pub fn rust_main() -> ! {
         fn boot_stack_top();
     }
     clear_bss();
-    println!("Hello, world!");
-    println!(".text [{:#x}, {:#x})", stext as usize, etext as usize);
-    println!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
-    println!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
-    println!(
+
+    oslog::init();
+    trace!("Hello, world!");
+    warn!(".text [{:#x}, {:#x})", stext as usize, etext as usize);
+    error!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
+    info!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
+    debug!(
         "boot_stack [{:#x}, {:#x})",
         boot_stack as usize, boot_stack_top as usize
     );
