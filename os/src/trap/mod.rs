@@ -13,7 +13,7 @@ use riscv::register::{
 use crate::syscall::syscall;
 use crate::batch::run_next_app;
 
-global_asm!(include_str!("trap.S"));
+core::arch::global_asm!(include_str!("trap.S"));
 
 pub fn init() {
     extern "C" { fn __alltraps(); }

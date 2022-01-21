@@ -1,6 +1,6 @@
 #![no_std]
 #![no_main]
-#![feature(asm)]
+//#![feature(asm)]
 
 #[macro_use]
 extern crate user_lib;
@@ -15,7 +15,7 @@ const STACK_SIZE: usize = 0x1000;
 
 unsafe fn r_sp() -> usize {
     let mut sp: usize;
-    asm!("mv {}, sp", out(reg) sp);
+    core::arch::asm!("mv {}, sp", out(reg) sp);
     sp
 }
 
@@ -27,6 +27,7 @@ unsafe fn stack_range() -> (usize, usize) {
 
 #[no_mangle]
 pub fn main() -> i32 {
+    println!("write0 0");
     assert_eq!(
         write(STDOUT, unsafe {
             #[allow(clippy::zero_ptr)]
@@ -34,6 +35,7 @@ pub fn main() -> i32 {
         }),
         -1
     );
+    println!("write0 1");
     let (bottom, top) = unsafe { stack_range() };
     assert_eq!(
         write(STDOUT, unsafe {
@@ -41,6 +43,7 @@ pub fn main() -> i32 {
         }),
         -1
     );
+    println!("write0 2");
     assert_eq!(
         write(STDOUT, unsafe {
             slice::from_raw_parts((bottom - 5) as *const _, 10)
